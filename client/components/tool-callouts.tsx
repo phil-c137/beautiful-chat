@@ -43,6 +43,9 @@ function countLines(text: string | undefined): number {
   return trimmed ? trimmed.split("\n").length : 0;
 }
 
+/** Claude reports a silent command with this sentence instead of an empty result. */
+const SILENT_RESULT = /^\((?:bash )?completed with no output\)$/i;
+
 function plural(count: number, noun: string): string {
   return `${count} ${noun}${count === 1 ? "" : "s"}`;
 }
@@ -66,7 +69,8 @@ function foldedSummary(data: ToolCalloutData): string | undefined {
   }
   if (data.tool === "bash" || data.tool === "shell" || data.tool === "git") {
     if (data.exitCode !== undefined && data.exitCode !== 0) return undefined;
-    const count = countLines(data.shell?.stdout ?? data.output);
+    const output = data.shell?.stdout ?? data.output;
+    const count = SILENT_RESULT.test(output?.trim() ?? "") ? 0 : countLines(output);
     return count > 0 ? plural(count, "line") : "no output";
   }
   return undefined;
