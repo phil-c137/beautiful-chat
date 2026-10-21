@@ -46,14 +46,19 @@ function countLines(text: string | undefined): number {
 /** Claude reports a silent command with this sentence instead of an empty result. */
 const SILENT_RESULT = /^\((?:bash )?completed with no output\)$/i;
 
+/** Git's closing line after a commit, merge, or `--stat`. */
+const GIT_SHORTSTAT =
+  /\d+ files? changed(?:, (\d+) insertions?\(\+\))?(?:, (\d+) deletions?\(-\))?/;
+
 function plural(count: number, noun: string): string {
   return `${count} ${noun}${count === 1 ? "" : "s"}`;
 }
 
 /**
  * What a folded card would show if opened, in a few characters: the size of
- * an edit, a file, or a command's output. A failed call already carries its
- * exit code in the header, and a kind with no simple measure shows nothing.
+ * an edit, a file, or a command's output. A git change reports its own
+ * insertions and deletions. A failed call already carries its exit code in the
+ * header, and a kind with no simple measure shows nothing.
  */
 function foldedSummary(data: ToolCalloutData): string | undefined {
   if (data.status !== "completed") return undefined;
@@ -70,6 +75,8 @@ function foldedSummary(data: ToolCalloutData): string | undefined {
   if (data.tool === "bash" || data.tool === "shell" || data.tool === "git") {
     if (data.exitCode !== undefined && data.exitCode !== 0) return undefined;
     const output = data.shell?.stdout ?? data.output;
+    const stat = output?.match(GIT_SHORTSTAT);
+    if (stat) return `+${stat[1] ?? 0} \u2212${stat[2] ?? 0}`;
     const count = SILENT_RESULT.test(output?.trim() ?? "") ? 0 : countLines(output);
     return count > 0 ? plural(count, "line") : "no output";
   }
