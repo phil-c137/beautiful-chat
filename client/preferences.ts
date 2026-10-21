@@ -62,6 +62,8 @@ export interface EnhancerPreferences {
    * folds when the call finishes. Off leaves running cards to the rules above.
    */
   expandWhileRunning: boolean;
+  /** A reasoning summary folds once the thought completes. Off keeps every summary open. */
+  collapseReasoning: boolean;
 }
 
 const STORAGE_KEY = "paseo/beautiful-chat/preferences/v1";
@@ -79,6 +81,7 @@ export const DEFAULT_PREFERENCES: Readonly<EnhancerPreferences> = {
   collapseTools: [...COLLAPSIBLE_TOOL_GROUPS],
   collapseLineLimit: 0,
   expandWhileRunning: true,
+  collapseReasoning: true,
 };
 
 const listeners = new Set<() => void>();
@@ -142,6 +145,10 @@ function loadPreferences(): EnhancerPreferences {
         typeof candidate.expandWhileRunning === "boolean"
           ? candidate.expandWhileRunning
           : DEFAULT_PREFERENCES.expandWhileRunning,
+      collapseReasoning:
+        typeof candidate.collapseReasoning === "boolean"
+          ? candidate.collapseReasoning
+          : DEFAULT_PREFERENCES.collapseReasoning,
     };
   } catch {
     return { ...DEFAULT_PREFERENCES };

@@ -155,6 +155,7 @@ Devicon brand marks, and the file-manager link.
 | Collapse when finished | Shell, write, edit, read, and other tool cards fold once done.     |
 | Collapse length        | Fold every finished card, or only those over 10, 20, or 50 lines.  |
 | Open while running     | Off keeps cards folded while their call is still running.          |
+| Fold reasoning         | Off keeps every reasoning summary open.                            |
 
 ---
 

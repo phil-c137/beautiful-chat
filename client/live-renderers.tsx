@@ -698,7 +698,7 @@ export function LiveReasoningRenderer({
       <ReasoningTrace
         data={reasoningData}
         tokens={tokens}
-        defaultExpanded={data.phase === "streaming"}
+        defaultExpanded={data.phase === "streaming" || !preferences.collapseReasoning}
       />
     </View>
   );
