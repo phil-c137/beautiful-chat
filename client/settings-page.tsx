@@ -442,7 +442,7 @@ export function BeautifulChatSettingsPage({ theme }: PluginSurfaceProps) {
       </View>
 
       <Text style={[styles.sectionTitle, { color: tokens.foreground, fontFamily: tokens.fontUi }]}>
-        Tool cards
+        Folding
       </Text>
       <View
         style={[
@@ -479,6 +479,14 @@ export function BeautifulChatSettingsPage({ theme }: PluginSurfaceProps) {
           description="A running call shows its output as it streams, then folds when it finishes. Turn this off to keep cards folded from the start."
           value={preferences.expandWhileRunning}
           onChange={(expandWhileRunning) => updateEnhancerPreferences({ expandWhileRunning })}
+          tokens={tokens}
+        />
+
+        <ToggleRow
+          title="Fold reasoning summaries"
+          description="A reasoning summary folds to its header once the thought completes. Turn this off to keep every summary open."
+          value={preferences.collapseReasoning}
+          onChange={(collapseReasoning) => updateEnhancerPreferences({ collapseReasoning })}
           tokens={tokens}
         />
       </View>
