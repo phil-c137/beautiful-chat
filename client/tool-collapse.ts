@@ -37,7 +37,8 @@ function bodyLines(data: ToolCalloutData): number {
 }
 
 /**
- * Whether a tool card opens. A failure always does, so the error is in view.
+ * Whether a tool card opens. A failure always does, so the error is in view,
+ * and so does a question, since folding it would hide what the agent asked.
  * A running card opens while it streams unless the reader turned that off,
  * and a finished one folds when its group is set to collapse and it runs
  * past the line limit.
@@ -46,7 +47,7 @@ export function toolCardStartsExpanded(
   data: ToolCalloutData,
   preferences: EnhancerPreferences,
 ): boolean {
-  if (data.status === "failed") return true;
+  if (data.status === "failed" || data.tool === "ask") return true;
   if (data.status === "running" && preferences.expandWhileRunning) return true;
   if (!preferences.collapseTools.includes(toolGroup(data.tool))) return true;
   return preferences.collapseLineLimit > 0 && bodyLines(data) <= preferences.collapseLineLimit;

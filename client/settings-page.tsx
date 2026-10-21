@@ -452,7 +452,7 @@ export function BeautifulChatSettingsPage({ theme }: PluginSurfaceProps) {
       >
         <MultiChoiceRow<CollapsibleToolGroup>
           title="Collapse when finished"
-          description="Cards of the chosen kinds fold to their header once the call finishes. A failed call stays open so the error is in view. Pressing a header opens or closes that card either way."
+          description="Cards of the chosen kinds fold to their header once the call finishes. A failed call stays open so the error is in view, and so does a question from the agent. Pressing a header opens or closes that card either way."
           values={preferences.collapseTools}
           options={TOOL_GROUP_OPTIONS}
           onChange={(values) =>
